@@ -1,4 +1,5 @@
 .code/
+.vscode/
 .idea/
 venv/
 __pycache__/
