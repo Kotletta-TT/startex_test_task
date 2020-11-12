@@ -6,7 +6,15 @@ from django.utils.translation import gettext_lazy as _
 
 class CustomUser(AbstractUser):
     username = None
+    # CUSTOMER = 1
+    # MANAGER = 2
+    #
+    # ROLE_CHOICES = (
+    #     (CUSTOMER, 'Customer'),
+    #     (MANAGER, 'Manager'),
+    # )
     email = models.EmailField(_("e-mail"), unique=True)
+    # role = models.PositiveSmallIntegerField(choices=ROLE_CHOICES)
     first_name = models.CharField(_("Имя"), max_length=25)
     last_name = models.CharField(_("Фамилия"), max_length=30)
     patronic_name = models.CharField(_("Отчетсво"), max_length=30)
@@ -41,10 +49,10 @@ class Product(models.Model):
 
 
 class Cart(models.Model):
-    date_created = models.DateTimeField(auto_now_add=True)
-    status = models.CharField(max_length=255, blank=True, null=True)
-    user = models.ForeignKey(CustomUser, related_name="carts", on_delete=models.CASCADE)
+    user = models.ForeignKey('core.CustomUser', related_name="cart", on_delete=models.CASCADE)
     items = models.ManyToManyField(Product)
+    # count_items = models.DecimalField(max_digits=10, decimal_places=2)
+    total_price = models.DecimalField(max_digits=10, decimal_places=2)
 
     class Meta:
         verbose_name = "Корзина"
@@ -52,3 +60,7 @@ class Cart(models.Model):
 
     def __str__(self):
         return self.user
+
+    # def save(self, *args, **kwargs):
+    #     """Здесь будем считать сумму корзины"""
+    #     pass
